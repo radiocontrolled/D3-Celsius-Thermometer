@@ -6,18 +6,14 @@ var city;
 var temperature;
 
 
-var scale = d3.scale.linear()
-    .domain([-50,110]) // the input domain is the Celsius scale  @ https://en.wikipedia.org/wiki/Celcius
-	.range([0,h/1.1]);   // the output range is the height of the mercury ? 
-
-var yAxis = d3.scale.linear()
-	.domain([-50,110]) // the input domain is the Celsius scale  @ https://en.wikipedia.org/wiki/Celcius
-	.range([h/1.1,0]);  
-
-
-/* the width/height of the thermometer should be proportional
- * to that of the viewport
+/* scale for thermometer 
+ * input domain is the Celsius scale
+ * output range extend is the height of the rect.thermometer 
  */
+var scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
+
+// scale for yAxis label
+var yAxis = d3.scale.linear().domain([-30,60]) .range([h/1.1,0]);  
 
 var svg = d3.select("article")
 	.append("svg")
@@ -36,11 +32,10 @@ var svg = d3.select("article")
 	})
 	
 	var svg2 = d3.select("svg")
-	svg2.append("rect").classed("mercury",true);
+		svg2.append("rect").classed("mercury",true);
 	
 	svg2.append("g") .attr("transform", "translate(50,10)")
-	.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
-
+		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
 
 
 var getCityTemperature = function(city){
@@ -50,21 +45,72 @@ var getCityTemperature = function(city){
 	return d3.json(cityString, function(error, json){
 		if(json){
 			
-			temperature = json.list[0].main.temp;
+			/* if there's more than one city with the same name, 
+			 * ask the user to clarify which city they meant
+			 * else display the temperature
+			 */
+			if (json.list.length > 1){
+				
 			
-			temperature = scale(temperature);
-			//console.log(scale(temperature));
+			d3.select("section")
+				.append("text")
+				.text(function(){
+					return "Did you mean" + function(){ // change this function so it builds a string. http://stackoverflow.com/questions/9538678/fastest-way-to-build-this-string
+						for (var i = 0; i < json.list.length; i++){
+							return json.list[i].name + "," + json.list[i].sys.country;
+							if (i != json.list.length-1){
+							return "or";
+					}
+					
+				}
+						
+					};
+				});
 			
-			var mercury = d3.select("rect.mercury")
-			mercury.transition().duration(2000)
-			.attr({
-				width: 18,
-				height: temperature,
-				rx: 10, 
-				ry: 10,
-				x: 101,
-				y: h/1.1 - temperature + 10
-			})
+			
+			/*
+			 * console.log("Did you mean");
+			 * 
+			 * for (var i = 0; i < json.list.length; i++){
+					console.log(json.list[i].name + "," + json.list[i].sys.country);
+					if (i != json.list.length-1){
+						console.log("or");
+					}
+					
+				}
+			 * 
+			 */
+				
+				
+					
+				
+			}
+			else{
+			
+				temperature = json.list[0].main.temp;
+			
+				temperature = scale(temperature);
+			
+				var mercury = d3.select("rect.mercury")
+				mercury.transition().duration(2000)
+				.attr({
+					width: 18,
+					height: temperature,
+					rx: 10, 
+					ry: 10,
+					x: 101,
+					y: h/1.1 - temperature + 10
+				});
+
+			/* 
+			 * var section = d3.select("section")
+				.append("text")
+				.text(function(){
+					
+				});
+			 */
+
+			}
 			
 		}
 		else if(error){
@@ -81,7 +127,6 @@ cityInputForm.addEventListener("submit", function (event) {
     event.preventDefault();
     city = cityInput.value;
     getCityTemperature(city);
-    
   });
 
 	
