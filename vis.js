@@ -7,7 +7,7 @@ var temperature;
 
 
 /* scale for thermometer 
- * input domain is the Celsius scale
+ * input domain is the Celsius scale (-30°C to 60°C)
  * output range extend is the height of the rect.thermometer 
  */
 var scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
@@ -52,40 +52,36 @@ var getCityTemperature = function(city){
 			if (json.list.length > 1){
 				
 			
-			d3.select("section")
-				.append("text")
-				.text(function(){
-					return "Did you mean" + function(){ // change this function so it builds a string. http://stackoverflow.com/questions/9538678/fastest-way-to-build-this-string
-						for (var i = 0; i < json.list.length; i++){
+				d3.select("section")
+					.append("text")
+					.text(function(){
+						return "Did you mean";
+					});
+
+				
+				for (var i = 0; i < json.list.length; i++){
+					
+					d3.select("section")
+						.append("text")
+						.text(function(){
 							return json.list[i].name + "," + json.list[i].sys.country;
-							if (i != json.list.length-1){
-							return "or";
-					}
+						});
 					
-				}
-						
-					};
-				});
-			
-			
-			/*
-			 * console.log("Did you mean");
-			 * 
-			 * for (var i = 0; i < json.list.length; i++){
-					console.log(json.list[i].name + "," + json.list[i].sys.country);
 					if (i != json.list.length-1){
-						console.log("or");
+						
+						d3.select("section")
+							.append("text")
+							.text(function(){
+								return " or ";
+							});
 					}
 					
-				}
-			 * 
-			 */
-				
-				
-					
+				};
 				
 			}
 			else{
+			
+				d3.selectAll("text").remove();
 			
 				temperature = json.list[0].main.temp;
 			
@@ -132,6 +128,21 @@ cityInputForm.addEventListener("submit", function (event) {
 	
 
 
-
+				
+			
+			/*
+			 * console.log("Did you mean");
+			 * 
+			 * for (var i = 0; i < json.list.length; i++){
+					console.log(json.list[i].name + "," + json.list[i].sys.country);
+					if (i != json.list.length-1){
+						console.log("or");
+					}
+					
+				}
+			 * 
+			 */
+				
+				
 
 
