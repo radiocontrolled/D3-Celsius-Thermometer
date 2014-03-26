@@ -53,26 +53,33 @@ var getCityTemperature = function(city){
 				
 			
 				d3.select("section")
-					.append("text")
+					.append("text").classed("note",true)
 					.text(function(){
-						return "Did you mean";
+						return "Did you mean ";
 					});
 
 				
 				for (var i = 0; i < json.list.length; i++){
 					
 					d3.select("section")
-						.append("text")
+						.append("text").classed("note",true)
 						.text(function(){
-							return json.list[i].name + "," + json.list[i].sys.country;
+							return json.list[i].name + ", " + json.list[i].sys.country;
 						});
 					
 					if (i != json.list.length-1){
 						
 						d3.select("section")
-							.append("text")
+							.append("text").classed("note",true)
 							.text(function(){
 								return " or ";
+							});
+					}
+					else if(i = json.list.length-1){
+						d3.select("section")
+							.append("text").classed("note",true)
+							.text(function(){
+								return "?";
 							});
 					}
 					
@@ -81,7 +88,7 @@ var getCityTemperature = function(city){
 			}
 			else{
 			
-				d3.selectAll("text").remove();
+				d3.selectAll("text.note").remove();
 			
 				temperature = json.list[0].main.temp;
 			
