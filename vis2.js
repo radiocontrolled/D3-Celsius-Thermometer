@@ -21,23 +21,13 @@ var svg = d3.select("article")
 		width: w, 
 		height: h
 	})
-.append("rect").classed("thermometer",true)
-	.attr({
-		width: 20,
-		height: h/1.1,
-		rx: 10, 
-		ry: 10,
-		x: 100,
-		y: 10
-	});
-	
-	var svg2 = d3.select("article svg");
-	
-	
+	.append("rect").classed("thermometer",true)
+	.attr({width: 20, height: h/1.1, rx: 10, ry: 10, x: 100, y: 10});
+
+	var svg2 = d3.select("svg");
 	svg2.append("g") .attr("transform", "translate(50,10)")
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
-		
-	var article = d3.select("svg");	
+
 
 
 var getCityTemperature = function(city){
@@ -49,75 +39,44 @@ var getCityTemperature = function(city){
 			
 			/* if there's more than one city with the same name, 
 			 * ask the user to clarify which city they meant
-			 * else display the temperature
 			 */
 			if (json.list.length > 1){
-			
-				d3.select("section")
-					.append("text").classed("note",true)
-					.text(function(){
-						return "Did you mean ";
-					});
-
+				
+				d3.select("section").append("text").classed("note",true).text(function(){return "Did you mean ";});
 				
 				for (var i = 0; i < json.list.length; i++){
-					
-					d3.select("section")
-						.append("text").classed("note",true)
-						.text(function(){
-							return json.list[i].name + ", " + json.list[i].sys.country;
-						});
+					d3.select("section").append("text").classed("note",true).text(function(){return json.list[i].name + ", " + json.list[i].sys.country;});
 					
 					if (i != json.list.length-1){
-						
-						d3.select("section")
-							.append("text").classed("note",true)
-							.text(function(){
-								return " or ";
-							});
+						d3.select("section").append("text").classed("note",true).text(function(){return " or ";});
 					}
-					else if(i = json.list.length-1){
-						d3.select("section")
-							.append("text").classed("note",true)
-							.text(function(){
-								return "?";
-							});
+					else {
+						d3.select("section").append("text").classed("note",true).text(function(){return "?";});
 					}
-					
-				};
+				}
 				
 			}
+			/* when a soecific city is searched for, 
+			 * display the temperature
+			 */
 			else{
 			
 				d3.selectAll("text.note").remove();
-			
-				temperature = json.list[0].main.temp;
-			
-				temperature = [scale(temperature)];
-		
-				
-				
-				var mercuryDiv = article.selectAll("rect.mercury")
-					.data(temperature, function(d){return d;});
-					
-			
 
-				mercuryDiv.enter()
-					.append("rect")
-					.classed("mercury",true)
-					.transition().duration(20)
+				temperature = json.list[0].main.temp;
+				
+				temperature = scale(temperature);
+				
+				var mercury = d3.select("rect.mercury")
+					mercury.transition().duration(2000)
 					.attr({
-						y: function(d){
-							return  h/1.1 - d + 10;	
-						}, 
-						x: 101,
-						rx: 10, 
-						ry: 10,
-						height: function(d){return d;},
-						width: 18
-					});
-						
-				mercuryDiv.exit().remove();
+				width: 18,
+				height: temperature,
+				rx: 10,
+				ry: 10,
+				x: 101,
+				y: h/1.1 - temperature + 10
+				});
 				
 				
 			}
@@ -129,22 +88,13 @@ var getCityTemperature = function(city){
 	});
 };
 
-
-
 var cityInput = document.getElementById("cityInput");
 
 cityInputForm.addEventListener("submit", function (event) {
     event.preventDefault();
     city = cityInput.value;
     getCityTemperature(city);
-    
   });
 
 	
-
-
-				
-				
-				
-
 
