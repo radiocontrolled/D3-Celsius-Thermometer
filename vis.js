@@ -81,7 +81,7 @@ var getCityTemperature = function(city){
 								return " or ";
 							});
 					}
-					else if(i = json.list.length-1){
+					else if(i == json.list.length-1){
 						d3.select("section")
 							.append("text").classed("note",true)
 							.text(function(){
