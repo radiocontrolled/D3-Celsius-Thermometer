@@ -1,7 +1,7 @@
 
 var w = window.innerWidth/1.2;
 var h = window.innerHeight/1.5;
-var cityString; 
+var string; 
 var city;
 var temperature;
 
@@ -39,6 +39,14 @@ var removeText = function(){
 	d3.selectAll("text.note").remove();
 };
 
+var displayText = function(string){			
+	d3.select("#cityInputForm")
+		.append("text").classed("note",true)
+		.text(function(){
+			return string;
+		});
+};
+
 var getCityTemperature = function(city){
 	
 	cityString = "http://api.openweathermap.org/data/2.5/find?q=" + city + "&units=metric";
@@ -54,39 +62,22 @@ var getCityTemperature = function(city){
 				
 				removeText();
 			
-				d3.select("section")
-					.append("text").classed("note",true)
-					.text(function(){
-						return "Did you mean ";
-					});
-
+				var clarify = "Did you mean ";
+				displayText(clarify);
 				
 				for (var i = 0; i < json.list.length; i++){
-					
-					d3.select("section")
-						.append("text").classed("note",true)
-						.text(function(){
-							return json.list[i].name + ", " + json.list[i].sys.country;
-						});
+						var stringEither = json.list[i].name + ", " + json.list[i].sys.country;
+						displayText(stringEither);
 					
 					if (i != json.list.length-1){
-						
-						d3.select("section")
-							.append("text").classed("note",true)
-							.text(function(){
-								return " or ";
-							});
+						var stringOr = " or ";
+						displayText(stringOr);
 					}
 					else if(i == json.list.length-1){
-						d3.select("section")
-							.append("text").classed("note",true)
-							.text(function(){
-								return "?";
-							});
-					}
-					
+						var stringEnd = "?";
+						displayText(stringEnd);	
+					}	
 				}
-				
 			}
 			else{
 			
@@ -127,11 +118,8 @@ var getCityTemperature = function(city){
 					})
 					.duration(1000);
 					
-			d3.select("#cityInputForm")
-					.append("text").classed("note",true)
-					.text(function(){
-						return json.list[0].name + ", " + json.list[0].sys.country + ": Temperature: " + json.list[0].main.temp + "  Humidity: " + json.list[0].main.humidity;
-					});
+				var tempInfo = json.list[0].name + ", " + json.list[0].sys.country + ": Temperature: " + json.list[0].main.temp + "°C  Humidity: " + json.list[0].main.humidity;
+				displayText(tempInfo);
 			}
 			
 		}
@@ -140,8 +128,6 @@ var getCityTemperature = function(city){
 		}
 	});
 };
-
-
 
 var cityInput = document.getElementById("cityInput");
 
