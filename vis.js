@@ -15,12 +15,8 @@ var scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);
 // scale for yAxis label
 var yAxis = d3.scale.linear().domain([-30,60]) .range([h/1.1,0]);  
 
-var svg = d3.select("article")
-	.append("svg")
-	.attr({
-		width: w, 
-		height: h
-	})
+d3.select("article").append("svg").attr({width: w, height: h})
+
 .append("rect").classed("thermometer",true)
 	.attr({
 		width: 20,
@@ -133,7 +129,7 @@ var getCityTemperature = function(city){
 					
 			d3.select("#cityInputForm")
 					.append("text").classed("note",true)
-					.text(function(d){
+					.text(function(){
 						return json.list[0].name + ", " + json.list[0].sys.country + ": Temperature: " + json.list[0].main.temp + "  Humidity: " + json.list[0].main.humidity;
 					});
 			}
