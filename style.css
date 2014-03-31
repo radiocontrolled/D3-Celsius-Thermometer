@@ -5,7 +5,7 @@ body {
     color: #34495E!important;
 }
 h1{
-	font-size: 20px;
+	font-size: 18px;
 }
 a{
 	color: #E74C3C;
@@ -40,6 +40,9 @@ text{
 	font-size: 10px;
 	color: #34495E;
 }
+text.note{
+	font-size: 15px;
+}
 rect.mercury{
 	stroke-width: 2;
 	stroke: #c0392b;
@@ -57,4 +60,9 @@ input{
     color: #34495E;
     padding: 8px 12px;
     margin-right: 15px;
+}
+.well{
+	background: #EBEDEF;
+	padding: 1em;
+	float: left;
 }

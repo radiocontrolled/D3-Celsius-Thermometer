@@ -39,6 +39,9 @@ var svg = d3.select("article")
 		
 	var article = d3.select("svg");	
 
+var removeText = function(){
+	d3.selectAll("text.note").remove();
+};
 
 var getCityTemperature = function(city){
 	
@@ -52,6 +55,8 @@ var getCityTemperature = function(city){
 			 * else display the temperature
 			 */
 			if (json.list.length > 1){
+				
+				removeText();
 			
 				d3.select("section")
 					.append("text").classed("note",true)
@@ -84,42 +89,53 @@ var getCityTemperature = function(city){
 							});
 					}
 					
-				};
+				}
 				
 			}
 			else{
 			
-				d3.selectAll("text.note").remove();
-			
-				temperature = json.list[0].main.temp;
-			
-				temperature = [scale(temperature)];
-		
-				
-				
-				var mercuryDiv = article.selectAll("rect.mercury")
-					.data(temperature, function(d){return d;});
-					
-			
+				removeText();
 
-				mercuryDiv.enter()
+				temperature = [scale(json.list[0].main.temp)];
+						
+				var mercuryDiv = article.selectAll("rect.mercury")
+					.data(temperature, function(d){return d;});			
+
+				mercuryDiv
+					.enter()
 					.append("rect")
 					.classed("mercury",true)
-					.transition().duration(20)
 					.attr({
 						y: function(d){
-							return  h/1.1 - d + 10;	
-						}, 
+							return   h/1.1 + d + 10;	
+						},
+						height: - h/1.1,
 						x: 101,
 						rx: 10, 
 						ry: 10,
-						height: function(d){return d;},
 						width: 18
 					});
-						
-				mercuryDiv.exit().remove();
 				
-				
+				mercuryDiv
+					.exit().remove();
+					
+				mercuryDiv
+					.transition()
+					.attr({
+						y: function(d){
+							return  h/1.1 - d + 10;	
+						},
+						height: function(d){
+							return d;
+						}
+					})
+					.duration(1000);
+					
+			d3.select("#cityInputForm")
+					.append("text").classed("note",true)
+					.text(function(d){
+						return json.list[0].name + ", " + json.list[0].sys.country + ": Temperature: " + json.list[0].main.temp + "  Humidity: " + json.list[0].main.humidity;
+					});
 			}
 			
 		}
