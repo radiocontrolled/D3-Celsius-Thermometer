@@ -1,10 +1,6 @@
-
 var w = window.innerWidth/1.2;
 var h = window.innerHeight/1.5;
-var string; 
-var city;
-var temperature;
-
+var string, city, temperature, bulb, bulbLabels;
 
 /* scale for thermometer 
  * input domain is the Celsius scale (-30°C to 60°C)
@@ -15,25 +11,28 @@ var scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);
 // scale for yAxis label
 var yAxis = d3.scale.linear().domain([-30,60]) .range([h/1.1,0]);  
 
-d3.select("article").append("svg").attr({width: w, height: h})
+/* draws and labels the thermometer */
+var drawThermometer = function(){
+	
+	bulb = d3.select("article").append("svg").attr({width: w, height: h})
+		.append("rect").classed("thermometer",true)
+		.attr({
+			width: 20,
+			height: h/1.1,
+			rx: 10, 
+			ry: 10,
+			x: 100, // redo
+			y: 10	// redo
+		});	
 
-.append("rect").classed("thermometer",true)
-	.attr({
-		width: 20,
-		height: h/1.1,
-		rx: 10, 
-		ry: 10,
-		x: 100,
-		y: 10
-	});
-	
-	var svg2 = d3.select("article svg");
-	
-	
-	svg2.append("g") .attr("transform", "translate(50,10)")
+	bulbLabels = d3.select("article svg")
+		.append("g").attr("transform", "translate(50,10)")
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
-		
-	var article = d3.select("svg");	
+};
+
+drawThermometer();
+
+var article = d3.select("svg");	
 
 var removeText = function(){
 	d3.selectAll("text.note").remove();
@@ -85,10 +84,10 @@ var getCityTemperature = function(city){
 
 				temperature = [scale(json.list[0].main.temp)];
 						
-				var mercuryDiv = article.selectAll("rect.mercury")
+				var mercury = article.selectAll("rect.mercury")
 					.data(temperature, function(d){return d;});			
 
-				mercuryDiv
+				mercury
 					.enter()
 					.append("rect")
 					.classed("mercury",true)
@@ -103,10 +102,10 @@ var getCityTemperature = function(city){
 						width: 18
 					});
 				
-				mercuryDiv
+				mercury
 					.exit().remove();
 					
-				mercuryDiv
+				mercury
 					.transition()
 					.attr({
 						y: function(d){
@@ -138,7 +137,20 @@ cityInputForm.addEventListener("submit", function (event) {
     
   });
 
-	
+
+/*resize on viewport size change*/
+
+function resize() {
+
+	bulb.remove();
+	bulbLabels.remove();
+	var mercury = article.selectAll("rect.mercury").remove();
+	w = window.innerWidth/1.2;
+	h = window.innerHeight/1.5;
+	drawThermometer();	
+}
+
+d3.select(window).on('resize', resize); 
 
 
 				
