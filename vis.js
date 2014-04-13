@@ -1,38 +1,46 @@
 var w = window.innerWidth/1.2;
 var h = window.innerHeight/1.5;
-var string, city, temperature, bulb, bulbLabels;
+var string, city, temperature, scale, yAxis, mercury;
 
-/* scale for thermometer 
- * input domain is the Celsius scale (-30°C to 60°C)
- * output range extend is the height of the rect.thermometer 
- */
-var scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
 
-// scale for yAxis label
-var yAxis = d3.scale.linear().domain([-30,60]) .range([h/1.1,0]);  
+var svg = d3.select("section").append("svg").attr({width: w, height: h})
+	.append("rect").classed("thermometer",true);
 
-/* draws and labels the thermometer */
-var drawThermometer = function(){
+var mercury = d3.select("svg").append("rect").classed("mercury",true);
+
+var drawThermometer = function() {
+	d3.select("svg").attr({
+		width: w, 
+		height: h
+	});
 	
-	bulb = d3.select("article").append("svg").attr({width: w, height: h})
-		.append("rect").classed("thermometer",true)
+	/* scale for thermometer 
+	* input domain is the Celsius scale (-30°C to 60°C)
+	* output range extend is the height of the rect.thermometer 
+	*/
+	scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
+
+	// scale for yAxis label - i.e. rect.thermometer
+	yAxis = d3.scale.linear().domain([-30,60]).range([h/1.1,0]); 
+	
+	d3.select("svg rect").classed("thermometer",true)		
 		.attr({
 			width: 20,
 			height: h/1.1,
 			rx: 10, 
 			ry: 10,
-			x: 100, // redo
-			y: 10	// redo
+			"transform":"translate(100,10)"
 		});	
 
-	bulbLabels = d3.select("article svg")
-		.append("g").attr("transform", "translate(50,10)")
+	d3.select("section svg")
+		.append("g").classed("bulbLabels",true).attr("transform", "translate(50,10)")
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
+
 };
 
 drawThermometer();
 
-var article = d3.select("svg");	
+var section = d3.select("svg");	
 
 var removeText = function(){
 	d3.selectAll("text.note").remove();
@@ -53,9 +61,8 @@ var getCityTemperature = function(city){
 	return d3.json(cityString, function(error, json){
 		if(json){
 			
-			/* if there's more than one city with the same name, 
-			 * ask the user to clarify which city they meant
-			 * else display the temperature
+			/* If there are multiple cities with same name, 
+			 * get clarification from user
 			 */
 			if (json.list.length > 1){
 				
@@ -84,7 +91,7 @@ var getCityTemperature = function(city){
 
 				temperature = [scale(json.list[0].main.temp)];
 						
-				var mercury = article.selectAll("rect.mercury")
+				mercury = section.selectAll("rect.mercury")
 					.data(temperature, function(d){return d;});			
 
 				mercury
@@ -138,13 +145,13 @@ cityInputForm.addEventListener("submit", function (event) {
   });
 
 
-/*resize on viewport size change*/
-
+/*
+ * resize the thermometer, its scale
+ * and the mercury on viewport size change
+ */
 function resize() {
-
-	bulb.remove();
-	bulbLabels.remove();
-	var mercury = article.selectAll("rect.mercury").remove();
+	section.selectAll("rect.mercury").remove();
+	var bulbLabels = d3.select("g.bulbLabels").remove();
 	w = window.innerWidth/1.2;
 	h = window.innerHeight/1.5;
 	drawThermometer();	

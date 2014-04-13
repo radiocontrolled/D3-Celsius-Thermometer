@@ -12,26 +12,6 @@ a{
 	color: #E74C3C;
 	text-decoration: none;
 }
-.progress {
-	background: white;
-	width: 100px;
-	height: 20px;
-	line-height: 20px;
-	padding: .2em ;
-	border-radius: 4px;
-	border: 2px #BDC3C7 solid;
-}
-
-.progress-bar {
-    background-color: #E74C3C;
-    color: #FFFFFF;
-    float: left;
-    border-radius: inherit;
-    text-align: center;
-    width: 25px;
-    border-right: 2px #c0392b solid;
-}
-
 rect.thermometer, .domain{
 	stroke-width: 2;
 	stroke: #BDC3C7;
@@ -50,10 +30,6 @@ rect.mercury{
 	fill: #E74C3C;
 }
 
-article{
-	padding: 1em;
-	margin: 0 auto;
-}
 input{
 	border: 2px solid #34495E;
     border-radius: 5px;
@@ -66,4 +42,23 @@ input{
 	background: #EBEDEF;
 	padding: 1em;
 	float: left;
+}
+
+/* media queries for thermometer scale text */
+@media (max-width: 400px){
+	.tick text{
+    
+	}
+}
+
+@media (min-width: 401px){
+	.tick text{
+    
+	}
+}
+
+@media (min-width: 768px){
+	.tick text{
+    
+	}
 }
