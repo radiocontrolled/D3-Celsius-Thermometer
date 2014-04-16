@@ -1,10 +1,7 @@
-D3.JS Celsius thermometer which uses data from the <a href="http://openweathermap.org/">Open Weather Map API</a>. 
+# About 
+The D3.JS Celsius thermometer uses data from the <a href="http://openweathermap.org/">Open Weather Map API</a> and allows users to search and display the temperature for a city. 
 
-
-roadmap
-- create a function so that when a user selects a city with more than one result, the user can click to clarify the region they intended to search for, and that city populates the search box 
-- on resize(), if a temperature has already been searched for, the mercury should not be removed
-- redraw the thermometer on resize(), in a way that makes it readible at smaller viewport sizes 
+## Roadmap 
+- create a function so that when a user selects a city with more than one result, the user can click to clarify the region they intended to search for
 - use HTML instead of <text> elements for the search form
-- write media queries for thermometer scale text 
-- write tests
+- write media queries for the thermometer's labels

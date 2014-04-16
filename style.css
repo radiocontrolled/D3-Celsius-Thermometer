@@ -5,6 +5,12 @@ body {
     color: #34495E!important;
     margin: 1.5em!important;
 }
+/* hack */ 
+p {
+    float: left;
+    padding: 0.1em;
+    text-align: justify !important;
+}
 h1{
 	font-size: 18px;
 }
@@ -18,11 +24,10 @@ rect.thermometer, .domain{
 	fill: #ffffff;
 }
 text{
-	font-size: 10px;
 	color: #34495E;
 }
 text.note{
-	font-size: 15px;
+	font-size: 0.938em;
 }
 rect.mercury{
 	stroke-width: 2;
@@ -38,27 +43,23 @@ input{
     padding: 8px 12px;
     margin-right: 15px;
 }
-.well{
-	background: #EBEDEF;
-	padding: 1em;
-	float: left;
-}
+
 
 /* media queries for thermometer scale text */
 @media (max-width: 400px){
 	.tick text{
-    
+    	font-size: .9em;
 	}
 }
 
 @media (min-width: 401px){
 	.tick text{
-    
+    	font-size: .7em;
 	}
 }
 
 @media (min-width: 768px){
 	.tick text{
-    
+    	font-size: .6em;
 	}
 }

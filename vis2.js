@@ -1,42 +1,39 @@
+
 var w = window.innerWidth/1.2;
 var h = window.innerHeight/1.5;
-var city, temperature, scale, yAxis;
+var string; 
+var city;
+var temperature;
 
-var svg = d3.select("section").append("svg").attr({width: w, height: h})
-	.append("rect").classed("thermometer",true);
 
-var drawThermometer = function() {
-	d3.select("svg").attr({
-		width: w, 
-		height: h
+/* scale for thermometer 
+ * input domain is the Celsius scale (-30°C to 60°C)
+ * output range extend is the height of the rect.thermometer 
+ */
+var scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
+
+// scale for yAxis label
+var yAxis = d3.scale.linear().domain([-30,60]) .range([h/1.1,0]);  
+
+d3.select("article").append("svg").attr({width: w, height: h})
+
+.append("rect").classed("thermometer",true)
+	.attr({
+		width: 20,
+		height: h/1.1,
+		rx: 10, 
+		ry: 10,
+		x: 100,
+		y: 10
 	});
 	
-	/* scale for thermometer 
-	* input domain is the Celsius scale (-30°C to 60°C)
-	* output range extend is the height of the rect.thermometer 
-	*/
-	scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
-
-	// scale for yAxis label - i.e. rect.thermometer
-	yAxis = d3.scale.linear().domain([-30,60]).range([h/1.1,0]); 
+	var svg2 = d3.select("article svg");
 	
-	d3.select("svg rect").classed("thermometer",true)		
-		.attr({
-			width: 20,
-			height: h/1.1,
-			rx: 10, 
-			ry: 10,
-			"transform":"translate(100,10)"
-		});	
-
-	d3.select("section svg")
-		.append("g").classed("bulbLabels",true).attr("transform", "translate(50,10)")
+	
+	svg2.append("g") .attr("transform", "translate(50,10)")
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
-};
-
-drawThermometer();
-
-var section = d3.select("svg");	
+		
+	var article = d3.select("svg");	
 
 var removeText = function(){
 	d3.selectAll("text.note").remove();
@@ -52,13 +49,14 @@ var displayText = function(string){
 
 var getCityTemperature = function(city){
 	
-	var cityString = "http://api.openweathermap.org/data/2.5/find?q=" + city + "&units=metric";
+	cityString = "http://api.openweathermap.org/data/2.5/find?q=" + city + "&units=metric";
 	
 	return d3.json(cityString, function(error, json){
 		if(json){
 			
-			/* If there are multiple cities with same name, 
-			 * get clarification from user
+			/* if there's more than one city with the same name, 
+			 * ask the user to clarify which city they meant
+			 * else display the temperature
 			 */
 			if (json.list.length > 1){
 				
@@ -87,10 +85,10 @@ var getCityTemperature = function(city){
 
 				temperature = [scale(json.list[0].main.temp)];
 						
-				var mercury = section.selectAll("rect.mercury")
-					.data(temperature, function(d){return d;});	
-					
-				mercury
+				var mercuryDiv = article.selectAll("rect.mercury")
+					.data(temperature, function(d){return d;});			
+
+				mercuryDiv
 					.enter()
 					.append("rect")
 					.classed("mercury",true)
@@ -105,11 +103,10 @@ var getCityTemperature = function(city){
 						width: 18
 					});
 				
-					
-				mercury
+				mercuryDiv
 					.exit().remove();
 					
-				mercury
+				mercuryDiv
 					.transition()
 					.attr({
 						y: function(d){
@@ -133,38 +130,15 @@ var getCityTemperature = function(city){
 };
 
 var cityInput = document.getElementById("cityInput");
-var cityInputForm = document.getElementById("cityInputForm");
 
 cityInputForm.addEventListener("submit", function (event) {
     event.preventDefault();
     city = cityInput.value;
     getCityTemperature(city);
+    
   });
 
-/*
- * resize the thermometer, its scale
- * and the mercury on viewport size change
- */
-function resize() {
 	
-	d3.select("g.bulbLabels").remove();
-	
-	w = window.innerWidth/1.2;
-	h = window.innerHeight/1.5;
-	
-	drawThermometer();	
-	
-	/*
-	 *  if a temperature has already 
-	 *  been searched for, the mercury should be redrawn
-	 * 
-	 */
-	if(city){
-		getCityTemperature(city);	
-	}
-}
-
-d3.select(window).on('resize', resize); 
 
 
 				
