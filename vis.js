@@ -17,7 +17,7 @@ var drawThermometer = function() {
 	*/
 	scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
 
-	// scale for yAxis label - i.e. rect.thermometer
+	// scale for yAxis label for rect.thermometer
 	yAxis = d3.scale.linear().domain([-30,60]).range([h/1.1,0]); 
 	
 	d3.select("svg rect").classed("thermometer",true)		
@@ -43,11 +43,10 @@ var removeText = function(){
 };
 
 var displayText = function(string){			
-	d3.select("#cityInputForm")
-		.append("text").classed("note",true)
-		.text(function(){
-			return string;
-		});
+	
+	var note = document.getElementById("note"); 
+	note.innerHTML = string;
+	
 };
 
 var getCityTemperature = function(city){
@@ -65,20 +64,27 @@ var getCityTemperature = function(city){
 				removeText();
 			
 				var clarify = "Did you mean ";
-				displayText(clarify);
 				
 				for (var i = 0; i < json.list.length; i++){
 						var stringEither = json.list[i].name + ", " + json.list[i].sys.country;
-						displayText(stringEither);
+						clarify += "<a href='#' class='clarifyLink'>"+ stringEither + "</a>";
+						
 					
 					if (i != json.list.length-1){
 						var stringOr = " or ";
-						displayText(stringOr);
+						clarify += stringOr;
+						
 					}
 					else if(i == json.list.length-1){
 						var stringEnd = "?";
-						displayText(stringEnd);	
+						clarify += stringEnd;
+						
+						displayText(clarify);
+						searchPopulator();
+							
 					}	
+					
+					
 				}
 			}
 			else{
@@ -140,11 +146,28 @@ cityInputForm.addEventListener("submit", function (event) {
     city = cityInput.value;
     getCityTemperature(city);
   });
+  
+var searchPopulator = function (){
+	
+	var linkMatches = document.querySelectorAll(".clarifyLink");
+	
+	for (var i = 0; i < linkMatches.length ; i++){
+		linkMatches[i].addEventListener('click', trigger);
+	}
+	
+	function trigger(){
+		var word = this.innerHTML;
+		cityInput.value = word;
+		getCityTemperature(word);
+		
+	}
+};
 
 /*
  * resize the thermometer, its scale
  * and the mercury on viewport size change
  */
+
 function resize() {
 	
 	d3.select("g.bulbLabels").remove();
