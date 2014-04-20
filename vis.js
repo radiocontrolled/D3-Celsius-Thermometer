@@ -1,6 +1,14 @@
-var w = window.innerWidth/1.2;
+var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
 var city, temperature, scale, yAxis;
+
+var ifMobile = function(){
+	
+	if (window.innerWidth <= 600){
+		
+	}
+	
+};
 
 var svg = d3.select("section").append("svg").attr({width: w, height: h})
 	.append("rect").classed("thermometer",true);
@@ -22,12 +30,14 @@ var drawThermometer = function() {
 	
 	d3.select("svg rect").classed("thermometer",true)		
 		.attr({
-			width: 20,
+			width: 80,
 			height: h/1.1,
-			rx: 10, 
-			ry: 10,
+			rx: 40, 
+			ry: 40,
 			"transform":"translate(100,10)"
 		});	
+
+	// width: 80 and rx, ry 40 for mobile?
 
 	d3.select("section svg")
 		.append("g").classed("bulbLabels",true).attr("transform", "translate(50,10)")
@@ -106,9 +116,9 @@ var getCityTemperature = function(city){
 						},
 						height: - h/1.1,
 						x: 101,
-						rx: 10, 
-						ry: 10,
-						width: 18
+						rx: 38, 
+						ry: 38,
+						width: 78
 					});
 				
 					
@@ -189,8 +199,11 @@ function resize() {
 
 d3.select(window).on('resize', resize); 
 
+ if (document.body.clientWidth < 600) {
+        alert("mobile");
+    }
 
-				
+		
 				
 				
 

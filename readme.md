@@ -3,3 +3,5 @@ The D3.JS Celsius thermometer uses data from the <a href="http://openweathermap.
 
 ## Roadmap 
 - write media queries for the thermometer's labels
+- write tests 
+- add globe - http://bl.ocks.org/KoGor/5994804
