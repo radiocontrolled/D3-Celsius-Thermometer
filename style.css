@@ -16,20 +16,8 @@ a {
 	text-decoration: none;
 }
 
-rect.thermometer, .domain {
-	stroke-width: 2;
-	stroke:  #34495E;
-	fill: #ffffff;
-}
-
-rect.mercury {
-	stroke-width: 2;
-	stroke: #c0392b;
-	fill: #E74C3C;
-}
-
 text{
-	font-size: .7em;
+	font-size: .6em;
 }
 
 @media (max-width: 768px) {

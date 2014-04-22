@@ -25,7 +25,10 @@ var drawThermometer = function(w,h) {
 			height: h/1.1,
 			rx: w/16, 
 			ry: w/16,
-			"transform":"translate(" + w/2 + ",10)"
+			"transform":"translate(" + w/2 + ",10)",
+			"stroke-width": "2",
+			"stroke": "#34495E",
+			"fill": "#ffffff"
 		});	
 
 
@@ -42,8 +45,20 @@ var drawThermometer = function(w,h) {
 		
 
 	d3.select("section svg")
-		.append("g").classed("bulbLabels",true).attr("transform", "translate(" +  translateX  + ",10)")
+		.append("g").classed("bulbLabels",true)
+		.attr("transform", "translate(" +  translateX  + ",10)")
+		.attr({
+			"stroke": "#34495E",
+			"fill": "#ffffff"
+		})
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
+	
+	d3.selectAll("text")
+		.attr({
+			"stroke-width":"0",
+			"fill": "#34495E"
+		});
+		
 };
 
 drawThermometer(w,h);
@@ -116,7 +131,9 @@ var getCityTemperature = function(city) {
 						rx: w/16.5, 
 						ry: w/16.5,
 						width: w/8.5,
-						
+						"stroke-width": "2",
+						"stroke": "#c0392b",
+						"fill": "#E74C3C"
 					});
 				
 				mercury
