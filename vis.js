@@ -2,8 +2,7 @@ var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
 var city, temperature, scale, yAxis, positionLabels;
 
-var svg = d3.select("section").append("svg")
-	.append("rect").classed("thermometer",true);
+var svg = d3.select("section").append("svg").append("rect").classed("thermometer",true);
 
 var drawThermometer = function(w,h) {
 	d3.select("svg").attr({
@@ -22,7 +21,6 @@ var drawThermometer = function(w,h) {
 	
 	d3.select("svg rect").classed("thermometer",true)		
 		.attr({
-			//width: 30,
 			width: w/8,
 			height: h/1.1,
 			rx: w/16, 
@@ -31,7 +29,7 @@ var drawThermometer = function(w,h) {
 		});	
 
 
-	positionLabels = function (){
+	positionLabels = function () {
 		if (document.body.clientWidth < 600) {
 			translateX = w/10;
 		}
@@ -52,7 +50,7 @@ drawThermometer(w,h);
 
 var section = d3.select("svg");	
 
-var removeText = function(){
+var removeText = function() {
 	d3.selectAll("text.note").remove();
 };
 
@@ -63,7 +61,7 @@ var displayText = function(string){
 	
 };
 
-var getCityTemperature = function(city){
+var getCityTemperature = function(city) {
 	
 	var cityString = "http://api.openweathermap.org/data/2.5/find?q=" + city + "&units=metric";
 	
@@ -73,23 +71,23 @@ var getCityTemperature = function(city){
 			/* If there are multiple cities with same name, 
 			 * get clarification from user
 			 */
-			if (json.list.length > 1){
+			if (json.list.length > 1) {
 				
 				removeText();
 			
 				var clarify = "Did you mean ";
 				
-				for (var i = 0; i < json.list.length; i++){
+				for (var i = 0; i < json.list.length; i++) {
 						var stringEither = json.list[i].name + ", " + json.list[i].sys.country;
 						clarify += "<a href='#' class='clarifyLink'>"+ stringEither + "</a>";
 						
 					
-					if (i != json.list.length-1){
+					if (i != json.list.length-1) {
 						var stringOr = " or ";
 						clarify += stringOr;
 						
 					}
-					else if(i == json.list.length-1){
+					else if(i == json.list.length-1) {
 						var stringEnd = "?";
 						clarify += stringEnd;
 						
@@ -101,7 +99,7 @@ var getCityTemperature = function(city){
 					
 				}
 			}
-			else{
+			else {
 			
 				removeText();
 				
@@ -142,7 +140,14 @@ var getCityTemperature = function(city){
 					})
 					.duration(1000);
 					
-				var tempInfo = json.list[0].name + ", " + json.list[0].sys.country + ": Temperature: " + json.list[0].main.temp + "°C  Humidity: " + json.list[0].main.humidity;
+				var tempInfo = json.list[0].name + 
+								", " + 
+								json.list[0].sys.country + 
+								": Temperature: " + 
+								json.list[0].main.temp + 
+								"°C  Humidity: " + 
+								json.list[0].main.humidity;
+								
 				displayText(tempInfo);
 			}
 			
@@ -162,15 +167,15 @@ cityInputForm.addEventListener("submit", function (event) {
     getCityTemperature(city);
   });
   
-var searchPopulator = function (){
+var searchPopulator = function () {
 	
 	var linkMatches = document.querySelectorAll(".clarifyLink");
 	
-	for (var i = 0; i < linkMatches.length ; i++){
+	for (var i = 0; i < linkMatches.length ; i++) {
 		linkMatches[i].addEventListener('click', trigger);
 	}
 	
-	function trigger(){
+	function trigger() {
 		var word = this.innerHTML;
 		cityInput.value = word;
 		getCityTemperature(word);
@@ -195,8 +200,10 @@ function resize() {
 	/*
 	 *  if a temperature has already 
 	 *  been searched for, the mercury should be redrawn
-	 *  keeping the mercury present will cause problems
-	 *  when a mobile user's onscreen keyboard is opened/closed
+	 *  but testing reveals keeping the mercury present 
+	 *  will cause problems when a mobile user's onscreen 
+	 *  keyboard is opened/closed..
+	 * 
 	 * if(city){
 		getCityTemperature(city);	
 		}
