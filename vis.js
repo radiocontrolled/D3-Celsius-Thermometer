@@ -1,6 +1,6 @@
 var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
-var city, temperature, scale, yAxis;
+var city, temperature, scale, yAxis, positionLabels;
 
 var svg = d3.select("section").append("svg")
 	.append("rect").classed("thermometer",true);
@@ -31,7 +31,7 @@ var drawThermometer = function(w,h) {
 		});	
 
 
-	function positionLabels (){
+	positionLabels = function (){
 		if (document.body.clientWidth < 600) {
 			translateX = w/10;
 		}
@@ -39,7 +39,7 @@ var drawThermometer = function(w,h) {
 			translateX = w/3;
 		}	
 		return translateX;
-	}
+	};
 	positionLabels();
 		
 
@@ -104,7 +104,7 @@ var getCityTemperature = function(city){
 			else{
 			
 				removeText();
-
+				
 				temperature = [scale(json.list[0].main.temp)];
 						
 				var mercury = section.selectAll("rect.mercury")
@@ -186,7 +186,7 @@ var searchPopulator = function (){
 function resize() {
 	
 	d3.select("g.bulbLabels").remove();
-	
+	d3.select("rect.mercury").remove();
 	w = window.innerWidth/5;
 	h = window.innerHeight/1.5;
 	
@@ -195,10 +195,13 @@ function resize() {
 	/*
 	 *  if a temperature has already 
 	 *  been searched for, the mercury should be redrawn
-	 */
-	if(city){
+	 *  keeping the mercury present will cause problems
+	 *  when a mobile user's onscreen keyboard is opened/closed
+	 * if(city){
 		getCityTemperature(city);	
-	}
+		}
+	 */
+	
 }
 
 d3.select(window).on('resize', resize); 
