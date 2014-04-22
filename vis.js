@@ -2,20 +2,12 @@ var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
 var city, temperature, scale, yAxis;
 
-var ifMobile = function(){
-	
-	if (window.innerWidth <= 600){
-		
-	}
-	
-};
-
-var svg = d3.select("section").append("svg").attr({width: w, height: h})
+var svg = d3.select("section").append("svg")
 	.append("rect").classed("thermometer",true);
 
-var drawThermometer = function() {
+var drawThermometer = function(w,h) {
 	d3.select("svg").attr({
-		width: w, 
+		width: w,
 		height: h
 	});
 	
@@ -30,21 +22,33 @@ var drawThermometer = function() {
 	
 	d3.select("svg rect").classed("thermometer",true)		
 		.attr({
-			width: 80,
+			//width: 30,
+			width: w/8,
 			height: h/1.1,
-			rx: 40, 
-			ry: 40,
-			"transform":"translate(100,10)"
+			rx: w/16, 
+			ry: w/16,
+			"transform":"translate(" + w/2 + ",10)"
 		});	
 
-	// width: 80 and rx, ry 40 for mobile?
+
+	function positionLabels (){
+		if (document.body.clientWidth < 600) {
+			translateX = w/10;
+		}
+		else {
+			translateX = w/3;
+		}	
+		return translateX;
+	}
+	positionLabels();
+		
 
 	d3.select("section svg")
-		.append("g").classed("bulbLabels",true).attr("transform", "translate(50,10)")
+		.append("g").classed("bulbLabels",true).attr("transform", "translate(" +  translateX  + ",10)")
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
 };
 
-drawThermometer();
+drawThermometer(w,h);
 
 var section = d3.select("svg");	
 
@@ -115,10 +119,11 @@ var getCityTemperature = function(city){
 							return   h/1.1 + d + 10;	
 						},
 						height: - h/1.1,
-						x: 101,
-						rx: 38, 
-						ry: 38,
-						width: 78
+						x: w/1.99,
+						rx: w/16.5, 
+						ry: w/16.5,
+						width: w/8.5,
+						
 					});
 				
 					
@@ -182,15 +187,14 @@ function resize() {
 	
 	d3.select("g.bulbLabels").remove();
 	
-	w = window.innerWidth/1.2;
+	w = window.innerWidth/5;
 	h = window.innerHeight/1.5;
 	
-	drawThermometer();	
+	drawThermometer(w,h);	
 	
 	/*
 	 *  if a temperature has already 
 	 *  been searched for, the mercury should be redrawn
-	 * 
 	 */
 	if(city){
 		getCityTemperature(city);	
@@ -199,11 +203,7 @@ function resize() {
 
 d3.select(window).on('resize', resize); 
 
- if (document.body.clientWidth < 600) {
-        alert("mobile");
-    }
 
-		
 				
 				
 

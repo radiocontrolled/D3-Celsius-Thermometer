@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
-	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<title>Open Weather Map Thermometer</title>
 	<script src="d3.v3.js"></script>
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+	<section>
+	</section>
 	
+	<form id="cityInputForm">
+	  <label for="cityInput">Search for a city:</label>
+	  <input id="cityInput" name="name" value="London, GB">
+	  <input type="submit" value="Search">
+	</form>
+	
+	<div id="note">
+	</div>
 
-<section>
-</section>
-
-<h1>Search for a city</h1>
-<form id="cityInputForm">
-  <label for="cityInput">City name:</label>
-  <input id="cityInput" name="name" value="London, GB">
-  <input type="submit" value="Search">
-</form>
-<div id="note"></div>
-
-<footer>
-	<small>Data source: <a href="http://openweathermap.org/" title="Open Weather Map" target="_blank">Open Weather Map</a></small>
 
 <script src="vis.js"></script>
 </body>
