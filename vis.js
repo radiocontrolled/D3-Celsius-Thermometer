@@ -1,6 +1,6 @@
 var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
-var city, temperature, scale, yAxis, positionLabels;
+var city, temperature, scale, yAxis, positionLabels, translateX;
 
 var svg = d3.select("section").append("svg").append("rect").classed("thermometer",true);
 
@@ -81,22 +81,17 @@ var getCityTemperature = function(city) {
 						var stringEither = json.list[i].name + ", " + json.list[i].sys.country;
 						clarify += "<a href='#' class='clarifyLink'>"+ stringEither + "</a>";
 						
-					
 					if (i != json.list.length-1) {
 						var stringOr = " or ";
 						clarify += stringOr;
-						
 					}
+					
 					else if(i == json.list.length-1) {
 						var stringEnd = "?";
 						clarify += stringEnd;
-						
 						displayText(clarify);
 						searchPopulator();
-							
 					}	
-					
-					
 				}
 			}
 			else {
@@ -124,7 +119,6 @@ var getCityTemperature = function(city) {
 						
 					});
 				
-					
 				mercury
 					.exit().remove();
 					
@@ -179,7 +173,6 @@ var searchPopulator = function () {
 		var word = this.innerHTML;
 		cityInput.value = word;
 		getCityTemperature(word);
-		
 	}
 };
 
