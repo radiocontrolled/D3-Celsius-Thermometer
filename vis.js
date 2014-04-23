@@ -2,8 +2,16 @@ var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
 var city, temperature, scale, yAxis, positionLabels, translateX;
 
+// append rect to be used as thermometer to the svg
 var svg = d3.select("section").append("svg").append("rect").classed("thermometer",true);
 
+/*
+ *  Draw the thermometer with width/height/transform attributes
+ *  that are relative to the size of the viewport.
+ *  
+ *  Set and label the thermometer scalre
+ * 
+ */
 var drawThermometer = function(w,h) {
 	d3.select("svg").attr({
 		width: w,
@@ -11,8 +19,8 @@ var drawThermometer = function(w,h) {
 	});
 	
 	/* scale for thermometer 
-	* input domain is the Celsius scale (-30°C to 60°C)
-	* output range extend is the height of the rect.thermometer 
+	*  input domain is the Celsius scale (-30°C to 60°C)
+	*  output range extend is the height of the rect.thermometer 
 	*/
 	scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
 
@@ -46,10 +54,10 @@ var drawThermometer = function(w,h) {
 
 	d3.select("section svg")
 		.append("g").classed("bulbLabels",true)
-		.attr("transform", "translate(" +  translateX  + ",10)")
 		.attr({
 			"stroke": "#34495E",
-			"fill": "#ffffff"
+			"fill": "#ffffff",
+			"transform": "translate(" +  translateX  + ",10)"
 		})
 		.call(d3.svg.axis().scale(yAxis).orient("right").ticks(15));
 	
@@ -65,22 +73,26 @@ drawThermometer(w,h);
 
 var section = d3.select("svg");	
 
-var removeText = function() {
-	d3.selectAll("text.note").remove();
-};
 
-var displayText = function(string){			
-	
+/*
+ *  Set text in div.note
+ */
+var displayText = function(string) {			
 	var note = document.getElementById("note"); 
 	note.innerHTML = string;
-	
 };
 
+
+/*
+ *  Given a city name, get that city's current 
+ *  temperature. Animate the mercury 
+ *  representing that temperature. 
+ */
 var getCityTemperature = function(city) {
 	
 	var cityString = "http://api.openweathermap.org/data/2.5/find?q=" + city + "&units=metric";
 	
-	return d3.json(cityString, function(error, json){
+	return d3.json(cityString, function(error, json) {
 		if(json){
 			
 			/* If there are multiple cities with same name, 
@@ -88,8 +100,6 @@ var getCityTemperature = function(city) {
 			 */
 			if (json.list.length > 1) {
 				
-				removeText();
-			
 				var clarify = "Did you mean ";
 				
 				for (var i = 0; i < json.list.length; i++) {
@@ -110,8 +120,6 @@ var getCityTemperature = function(city) {
 				}
 			}
 			else {
-			
-				removeText();
 				
 				temperature = [scale(json.list[0].main.temp)];
 						
@@ -178,7 +186,12 @@ cityInputForm.addEventListener("submit", function (event) {
     getCityTemperature(city);
   });
   
-var searchPopulator = function () {
+
+/*
+ * If more than one city with the same name
+ * allow the user to clarify the city they meant
+ */
+var searchPopulator = function() {
 	
 	var linkMatches = document.querySelectorAll(".clarifyLink");
 	
@@ -193,8 +206,9 @@ var searchPopulator = function () {
 	}
 };
 
+
 /*
- * resize the thermometer, its scale
+ * Resize the thermometer, its scale
  * and the mercury on viewport size change
  */
 
