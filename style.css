@@ -1,14 +1,13 @@
 body {
     line-height: 1.467;
-    font-family: Arial, Helvetica, sans-serif!important;
-    color: #34495E!important;
-    margin: 1.5em!important;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #34495E;
+    margin: 1.5em;
     text-align: center;
 }
 
 section {
 	margin: 0 auto;
-	text-align: center;
 }
 
 a {
@@ -30,7 +29,6 @@ input {
 	border: 2px solid #34495E;
     border-radius: 5px;
     background: #EBEDEF;
-    color: #34495E;
     padding: 8px 12px;
     margin-right: 15px;
     margin-top: 1em;
