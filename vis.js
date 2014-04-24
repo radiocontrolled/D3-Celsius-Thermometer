@@ -2,7 +2,7 @@ var w = window.innerWidth/5;
 var h = window.innerHeight/1.5;
 var city, temperature, scale, yAxis, positionLabels, translateX;
 
-// append rect to be used as thermometer to the svg
+// Append rect to be used as thermometer to the svg
 var svg = d3.select("section").append("svg").append("rect").classed("thermometer",true);
 
 /*
@@ -18,13 +18,13 @@ var drawThermometer = function(w,h) {
 		height: h
 	});
 	
-	/* scale for thermometer 
+	/* Scale for thermometer 
 	*  input domain is the Celsius scale (-30°C to 60°C)
 	*  output range extend is the height of the rect.thermometer 
 	*/
 	scale = d3.scale.linear().domain([-30,60]).range([0,h/1.1]);   
 
-	// scale for yAxis label for rect.thermometer
+	// Scale for yAxis label for rect.thermometer
 	yAxis = d3.scale.linear().domain([-30,60]).range([h/1.1,0]); 
 	
 	d3.select("svg rect").classed("thermometer",true)		
@@ -73,7 +73,6 @@ drawThermometer(w,h);
 
 var section = d3.select("svg");	
 
-
 /*
  *  Set text in div.note
  */
@@ -90,10 +89,18 @@ var displayText = function(string) {
  */
 var getCityTemperature = function(city) {
 	
+	var target = document.getElementById("note");
+	target.textContent = "";
+	var spinner = new Spinner(opts).spin(target);
+	
+
 	var cityString = "http://api.openweathermap.org/data/2.5/find?q=" + city + "&units=metric";
 	
 	return d3.json(cityString, function(error, json) {
+		
 		if(json){
+			
+			spinner.stop();
 			
 			/* If there are multiple cities with same name, 
 			 * get clarification from user
@@ -120,6 +127,7 @@ var getCityTemperature = function(city) {
 				}
 			}
 			else {
+				spinner.stop();
 				
 				temperature = [scale(json.list[0].main.temp)];
 						
@@ -219,26 +227,35 @@ function resize() {
 	w = window.innerWidth/5;
 	h = window.innerHeight/1.5;
 	
-	drawThermometer(w,h);	
-	
-	/*
-	 *  if a temperature has already 
-	 *  been searched for, the mercury should be redrawn
-	 *  but testing reveals keeping the mercury present 
-	 *  will cause problems when a mobile user's onscreen 
-	 *  keyboard is opened/closed..
-	 * 
-	 * if(city){
-		getCityTemperature(city);	
-		}
-	 */
-	
+	drawThermometer(w,h);		
 }
 
 d3.select(window).on('resize', resize); 
 
+/*
+ * Spinner, by
+ * https://fgnass.github.io/spin.js/
+ */
 
-				
-				
+var opts = {
+	lines: 11, // The number of lines to draw
+	length: 4, // The length of each line
+	width: 2, // The line thickness
+	radius: 5, // The radius of the inner circle
+	corners: 1, // Corner roundness (0..1)
+	rotate: 0, // The rotation offset
+	direction: 1, // 1: clockwise, -1: counterclockwise
+	color: "#000", // #rgb or #rrggbb or array of colors
+	speed: 0.7, // Rounds per second
+	trail: 60, // Afterglow percentage
+	shadow: false, // Whether to render a shadow
+	hwaccel: false, // Whether to use hardware acceleration
+	className: "spinner", // The CSS class to assign to the spinner
+	zIndex: 2e9, // The z-index (defaults to 2000000000)
+	top: "50%", // Top position relative to parent
+	left: "50%", // Left position relative to parent
+	position: "relative" /* override absolute positioning and put spinner in #note */
+};
+
 
 
