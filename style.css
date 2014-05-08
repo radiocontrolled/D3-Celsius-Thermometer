@@ -6,8 +6,11 @@ body {
     text-align: center;
 }
 
+svg {
+	background: #efefef;
+}
 section {
-	margin: 0 auto;
+/*	margin: 0 auto; */
 }
 
 a {

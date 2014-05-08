@@ -4,6 +4,7 @@ var city, temperature, scale, yAxis, positionLabels, translateX;
 
 // Append rect to be used as thermometer to the svg
 var svg = d3.select("section").append("svg").append("rect").classed("thermometer",true);
+var svgForecast = d3.select("section").append("svg").classed("forecast",true).attr({width:w,height:h});
 
 /*
  *  Draw the thermometer with width/height/transform attributes
@@ -192,6 +193,8 @@ cityInputForm.addEventListener("submit", function (event) {
     event.preventDefault();
     city = cityInput.value;
     getCityTemperature(city);
+   	getFiveDayForecast(city);
+  
   });
   
 
@@ -212,6 +215,13 @@ var searchPopulator = function() {
 		cityInput.value = word;
 		getCityTemperature(word);
 	}
+};
+
+
+var getFiveDayForecast = function(city){
+
+	console.log(this.city);
+	
 };
 
 
@@ -256,6 +266,5 @@ var opts = {
 	left: "50%", // Left position relative to parent
 	position: "relative" /* override absolute positioning and put spinner in #note */
 };
-
 
 
